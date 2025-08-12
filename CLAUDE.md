@@ -194,6 +194,13 @@ As an *Application Developer*, I want to retrieve AI Flow results from the `flow
 33. **Connection pooling**: Configure database connection pools appropriately
 34. **Query optimization**: Write efficient queries and use database indexes wisely
 
+### Git Commit Guidelines
+
+35. **Commit message format**: Use concise, single-line commit messages describing what was done
+36. **No authorship claims**: Never include co-authorship or attribution information in commit messages
+37. **Action-based messages**: Use imperative mood describing the change (e.g., "Add user authentication", "Fix database connection")
+38. **One line only**: Commit messages should be one line without additional descriptions or explanations
+
 ## Development Commands
 
 ### Building and Running
