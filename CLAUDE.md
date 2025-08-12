@@ -201,6 +201,79 @@ As an *Application Developer*, I want to retrieve AI Flow results from the `flow
 37. **Action-based messages**: Use imperative mood describing the change (e.g., "Add user authentication", "Fix database connection")
 38. **One line only**: Commit messages should be one line without additional descriptions or explanations
 
+### API Design Standards
+
+39. **REST API principles**: Follow RESTful design principles with proper HTTP methods and status codes
+40. **OpenAPI/Swagger documentation**: Document all REST endpoints with OpenAPI 3.0 specifications
+41. **API versioning**: Use URL path versioning for API endpoints (e.g., `/api/v1/flows`)
+42. **Response formats**: Standardize JSON response structures with consistent error formats
+43. **HTTP status codes**: Use appropriate HTTP status codes (200, 201, 400, 401, 404, 500, etc.)
+44. **Request/Response validation**: Validate all input/output using JSON schemas
+45. **Pagination**: Implement cursor-based pagination for list endpoints
+46. **Rate limiting**: Implement rate limiting for API protection
+47. **CORS configuration**: Configure CORS properly for web client integration
+
+#### API Documentation Requirements
+
+The `internal/flowrun` module will expose REST APIs with the following requirements:
+
+- **Swagger UI Integration**: Publish interactive Swagger documentation page using Gin (similar to FastAPI's automatic docs)
+- **Live Documentation**: Swagger page accessible at `/docs` endpoint in development and production
+- **Auto-generated Schemas**: Generate OpenAPI schemas from Go structs using tags
+- **API Testing**: Swagger UI should allow testing endpoints directly from the documentation
+- **Authentication Documentation**: Document authentication requirements for protected endpoints
+
+#### Standard Response Formats
+
+**Success Response:**
+```json
+{
+  "status": "success",
+  "data": {
+    // actual response data
+  },
+  "meta": {
+    "timestamp": "2024-01-01T12:00:00Z",
+    "request_id": "uuid-here"
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "FLOW_NOT_FOUND",
+    "message": "Flow with ID 'abc123' not found",
+    "details": {}
+  },
+  "meta": {
+    "timestamp": "2024-01-01T12:00:00Z",
+    "request_id": "uuid-here"
+  }
+}
+```
+
+**List Response:**
+```json
+{
+  "status": "success",
+  "data": [
+    // array of items
+  ],
+  "pagination": {
+    "cursor": "next-page-token",
+    "has_more": true,
+    "limit": 20
+  },
+  "meta": {
+    "timestamp": "2024-01-01T12:00:00Z",
+    "request_id": "uuid-here"
+  }
+}
+```
+
 ## Development Commands
 
 ### Building and Running
@@ -390,6 +463,16 @@ This modular monolith structure allows for:
   - Validation of JSON payloads
   - API documentation generation
 
+#### API Documentation
+- **gin-swagger** (`github.com/swaggo/gin-swagger`) - Swagger integration for Gin
+  - Automatic OpenAPI documentation generation
+  - Interactive Swagger UI at `/docs` endpoint
+  - Auto-generated API schemas from Go struct tags
+- **swag** (`github.com/swaggo/swag`) - Swagger annotation parser
+  - Generate swagger.json from Go comments
+  - Support for OpenAPI 3.0 specifications
+  - Integration with Gin middleware
+
 ### External Dependencies
 
 #### LLM Integration
@@ -432,6 +515,8 @@ This modular monolith structure allows for:
 
 #### `internal/flowrun`
 - `gin` - HTTP API endpoints
+- `gin-swagger` - API documentation and Swagger UI
+- `swag` - Generate OpenAPI specs from code annotations
 - `logrus` - Request/response logging
 - `golang-migrate` - Database schema management
 - `gocron` - Background task scheduling
