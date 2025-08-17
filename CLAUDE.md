@@ -158,7 +158,7 @@ As an *Application Developer*, I want to retrieve AI Flow results from the `flow
 ### Code Quality & Testing
 
 11. **Run `make lint`**: Always run linting after changes to fix code style issues
-12. **Parallel tests**: All tests should be parallel using `t.Parallel()`
+12. **Parallel tests**: All tests must be parallel using `t.Parallel()` - call `t.Parallel()` at the beginning of every test function
 13. **Test naming**: Use pattern `Test<Function>If<Condition>` (e.g., `TestCreateUserIfValidInput`)
 14. **Group tests logically**: Use subtests with `t.Run()` to organize related test cases
 15. **Test coverage**: Maintain meaningful test coverage focusing on business logic
