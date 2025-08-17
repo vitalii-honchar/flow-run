@@ -9,7 +9,7 @@ import (
 type ProviderType string
 
 const (
-	ProviderTypeOpenRouter = "open_router"
+	ProviderTypeOpenRouter = ProviderType("open_router")
 )
 
 type Provider struct {
