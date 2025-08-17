@@ -22,31 +22,31 @@ type Provider struct {
 
 type ProviderOpt func(*Provider)
 
-func WithID(id uuid.UUID) ProviderOpt {
+func WithProviderID(id uuid.UUID) ProviderOpt {
 	return func(p *Provider) {
 		p.ID = id
 	}
 }
 
-func WithName(name string) ProviderOpt {
+func WithProviderName(name string) ProviderOpt {
 	return func(p *Provider) {
 		p.Name = name
 	}
 }
 
-func WithAccountID(accountID uuid.UUID) ProviderOpt {
+func WithProviderAccountID(accountID uuid.UUID) ProviderOpt {
 	return func(p *Provider) {
 		p.AccountID = accountID
 	}
 }
 
-func WithType(providerType ProviderType) ProviderOpt {
+func WithProviderType(providerType ProviderType) ProviderOpt {
 	return func(p *Provider) {
 		p.Type = providerType
 	}
 }
 
-func WithApiKey(apiKey string) ProviderOpt {
+func WithProviderApiKey(apiKey string) ProviderOpt {
 	return func(p *Provider) {
 		p.ApiKey = apiKey
 	}
