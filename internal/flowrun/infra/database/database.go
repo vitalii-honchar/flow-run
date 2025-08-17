@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"flow-run/internal/core/domain"
 	"flow-run/internal/lib/validator"
 	"time"
@@ -16,7 +17,11 @@ type DatabaseConfig struct {
 	ConnMaxLifetime time.Duration `validate:"required,min=1m,max=1h"`
 }
 
-func NewDatabase(config *DatabaseConfig) (*gorm.DB, error) {
+type Database struct {
+	*gorm.DB
+}
+
+func NewDatabase(config *DatabaseConfig) (*Database, error) {
 	// Validate config before using it
 	validatedConfig, err := validator.Struct(config)
 	if err != nil {
@@ -39,5 +44,14 @@ func NewDatabase(config *DatabaseConfig) (*gorm.DB, error) {
 
 	db.AutoMigrate(&domain.Provider{})
 
-	return db, nil
+	return &Database{DB: db}, nil
+}
+
+func (d *Database) Stop(ctx context.Context) error {
+	sqlDB, err := d.DB.DB()
+	if err != nil {
+		return err
+	}
+
+	return sqlDB.Close()
 }

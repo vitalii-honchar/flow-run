@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"flow-run/internal/flowrun"
 	"flow-run/internal/lib/logger"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -24,7 +26,10 @@ func main() {
 	sig := <-sigChan
 	logger.Log.WithField("signal", sig.String()).Info("Received shutdown signal")
 
-	if err := fr.Stop(); err != nil {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+
+	if err := fr.Stop(ctx); err != nil {
 		logger.Log.WithError(err).Error("Failed to stop FlowRun server gracefully")
 		os.Exit(1)
 	}
