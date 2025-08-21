@@ -10,13 +10,21 @@ import (
 	"time"
 )
 
+const (
+	startTimeout = 60 * time.Second
+	stopTimeout  = 60 * time.Second
+)
+
 func main() {
 	fr, err := flowrun.NewFlowRun()
 	if err != nil {
 		logger.Log.WithError(err).Fatal("Failed to create FlowRun instance")
 	}
 
-	if err := fr.Start(); err != nil {
+	ctx, cancel := context.WithTimeout(context.Background(), startTimeout)
+	defer cancel()
+
+	if err := fr.Start(ctx); err != nil {
 		logger.Log.WithError(err).Fatal("Failed to start FlowRun server")
 	}
 
@@ -26,7 +34,7 @@ func main() {
 	sig := <-sigChan
 	logger.Log.WithField("signal", sig.String()).Info("Received shutdown signal")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel = context.WithTimeout(context.Background(), stopTimeout)
 	defer cancel()
 
 	if err := fr.Stop(ctx); err != nil {

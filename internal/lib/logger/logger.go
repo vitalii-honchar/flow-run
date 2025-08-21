@@ -20,3 +20,7 @@ func init() {
 	Log.SetLevel(logrus.InfoLevel)
 	Log.SetOutput(os.Stdout)
 }
+
+func WithError(err error) *logrus.Entry {
+	return Log.WithError(err)
+}

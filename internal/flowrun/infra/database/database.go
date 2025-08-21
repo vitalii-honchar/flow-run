@@ -55,3 +55,7 @@ func (d *Database) Stop(ctx context.Context) error {
 
 	return sqlDB.Close()
 }
+
+func (d *Database) Ping(ctx context.Context) error {
+	return d.DB.Exec("SELECT 1").Error
+}
