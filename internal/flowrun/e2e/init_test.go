@@ -4,6 +4,8 @@ import (
 	"context"
 	"flow-run/internal/flowrun"
 	"flow-run/internal/lib/logger"
+	"flow-run/pkg/flowrunclient"
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -14,6 +16,7 @@ import (
 
 var (
 	testFlowRun *flowrun.FlowRun
+	testClient  flowrunclient.FlowRunClient
 )
 
 const (
@@ -41,6 +44,8 @@ func TestMain(m *testing.M) {
 		logger.WithError(err).Fatal("Failed to start FlowRun instance")
 	}
 	defer stopFlowRun()
+
+	testClient = flowrunclient.NewFlowRunClient(fmt.Sprintf("http://%s:%s", testFlowRun.Config.ServerHost, testFlowRun.Config.ServerPort))
 
 	code := m.Run()
 

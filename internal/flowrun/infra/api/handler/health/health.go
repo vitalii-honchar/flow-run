@@ -3,6 +3,7 @@ package health
 import (
 	"context"
 	"flow-run/internal/lib/logger"
+	"flow-run/pkg/flowrunclient/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,9 +43,9 @@ func (h *HealthHandler) Handle(c *gin.Context) {
 
 	if err := h.dbPinger.Ping(c.Request.Context()); err != nil {
 		logger.WithError(err).Error("Database ping failed")
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "unhealthy"})
+		c.JSON(http.StatusInternalServerError, model.NewHealthResponse(model.HealthStatusDown))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "healthy"})
+	c.JSON(http.StatusOK, model.NewHealthResponse(model.HealthStatusUp))
 }
